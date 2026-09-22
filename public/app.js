@@ -1,5 +1,5 @@
 import { createApp, ref, onMounted } from '/vendor/vue.js';
-
+//여기선 파일을 나눠뒀지만 vue 같은 경우는 js, html, css를 한 다 넣어도 됨.  
 createApp({
     setup() {
         const posts = ref([]);
