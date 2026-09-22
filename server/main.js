@@ -10,14 +10,17 @@ import { HttpError } from './input.js';
 const app = express();
 // express.json() 미들웨어를 사용하여 요청 본문을 JSON으로 파싱하도록 설정. limit 옵션은 요청 본문의 최대 크기를 제한.
 app.use(express.json({ limit: '100kb' }));
-// /api/posts 경로로 들어오는 요청은 router가 처리하도록 설정
+// router를 /api/posts 경로에 연결. 즉, /api/posts로 시작하는 요청은 router에서 정의한 규칙에 따라 처리됨.
 app.use('/api/posts', router);
 // Vue 패키지의 브라우저 모듈을 로컬에서 제공합니다.
+// import.meta.url -> new URL(...) -> file:// 형태의 URL -> fileURLToPath() -> 실제 파일 경로 -> res.sendFile()
 app.get('/vendor/vue.js', (req, res) => {
+    // Express가 해당 파일을 HTTP응답으로 보내는 함수. 즉 Get/vendor/vue.js 요청이 들어오면 실제로는 node_modules/vue/dist/vue.esm-browser.prod.js 를 전달
     res.sendFile(fileURLToPath(
         new URL('../node_modules/vue/dist/vue.esm-browser.prod.js', import.meta.url),
     ), { dotfiles: 'allow' });
 });
+// public 폴더를 정적 파일 제공 경로로 설정. public 폴더 안에 있는 HTML, CSS, JS 파일을 브라우저에서 직접 접근 가능하도록 함. 예를 들어 public/index.html 파일은 http://
 app.use(express.static(fileURLToPath(new URL('../public', import.meta.url))));
 app.use((req, res, next) => next(new HttpError(404, '경로를 찾을 수 없습니다.')));
 app.use((err, req, res, next) => {
