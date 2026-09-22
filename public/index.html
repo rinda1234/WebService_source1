@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>웹서비스설계 · 게시판</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main id="app" v-cloak>
+    <header><span>웹서비스설계</span><h1>게시판</h1><p>Vue 화면에서 Express API로 게시글을 관리합니다.</p></header>
+    <p v-if="error" role="alert" class="error">{{ error }}</p>
+    <p v-if="notice" role="status" class="notice">{{ notice }}</p>
+    <div class="layout">
+        <section>
+            <div class="section-title"><h2>게시글 목록</h2><button @click="load" :disabled="busy">새로고침</button></div>
+            <p v-if="!posts.length" class="muted">등록된 게시글이 없습니다.</p>
+            <button v-for="post in posts" :key="post.id" class="post-row" @click="openPost(post.id)" :disabled="busy">
+                <span>{{ post.title }}</span><small>#{{ post.id }}</small>
+            </button>
+            <article v-if="selected" class="detail">
+                <small>상세 #{{ selected.id }}</small><h2>{{ selected.title }}</h2>
+                <p class="post-content">{{ selected.content }}</p>
+                <div class="actions"><button @click="editPost" :disabled="busy">수정</button><button @click="removePost" :disabled="busy">삭제</button></div>
+            </article>
+        </section>
+        <section>
+            <h2>{{ editingId === null ? '새 게시글' : '게시글 수정' }}</h2>
+            <form @submit.prevent="savePost">
+                <label>제목<input v-model="title" maxlength="100" required :disabled="busy"></label>
+                <label>본문<textarea v-model="content" maxlength="10000" required rows="8" :disabled="busy"></textarea></label>
+                <div class="actions"><button class="primary" :disabled="busy">{{ busy ? '처리 중…' : editingId === null ? '등록' : '수정 저장' }}</button><button v-if="editingId !== null" type="button" @click="resetForm" :disabled="busy">취소</button></div>
+            </form>
+        </section>
+    </div>
+</main>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

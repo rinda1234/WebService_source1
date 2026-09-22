@@ -1,0 +1,23 @@
+### 등록: 응답 id를 아래 요청에 사용합니다.
+POST http://127.0.0.1:3000/api/posts
+Content-Type: application/json
+
+{"title":"첫 게시글","content":"웹서비스설계 실습입니다."}
+
+### 목록
+GET http://127.0.0.1:3000/api/posts
+
+### 상세 (1을 등록 응답의 id로 바꾸기)
+GET http://127.0.0.1:3000/api/posts/1
+
+### 제목만 수정
+PATCH http://127.0.0.1:3000/api/posts/1
+Content-Type: application/json
+
+{"title":"수정한 제목"}
+
+### 삭제
+DELETE http://127.0.0.1:3000/api/posts/1
+
+### 삭제 후 상세: 404
+GET http://127.0.0.1:3000/api/posts/1
